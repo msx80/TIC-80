@@ -84,6 +84,10 @@ typedef enum
     WrenScript, 
 #endif
 
+#if defined(TIC_BUILD_WITH_WASM)
+    WasmScript, 
+#endif
+
 #if defined(TIC_BUILD_WITH_SQUIRREL)
     SquirrelScript,
 #endif
@@ -113,6 +117,10 @@ static const char DefaultJSTicPath[] = TIC_LOCAL_VERSION "default_js.tic";
 
 #if defined(TIC_BUILD_WITH_WREN)
 static const char DefaultWrenTicPath[] = TIC_LOCAL_VERSION "default_wren.tic";
+#endif
+
+#if defined(TIC_BUILD_WITH_WASM)
+static const char DefaultWasmTicPath[] = TIC_LOCAL_VERSION "default_wasm.tic";
 #endif
 
 #if defined(TIC_BUILD_WITH_SQUIRREL)
@@ -480,6 +488,10 @@ static void* getDemoCart(Console* console, ScriptLang script, s32* size)
         case WrenScript: strcpy(path, DefaultWrenTicPath); break;
 #endif
 
+#if defined(TIC_BUILD_WITH_WASM)
+        case WasmScript: strcpy(path, DefaultWasmTicPath); break;
+#endif
+
 #if defined(TIC_BUILD_WITH_SQUIRREL)
         case SquirrelScript: strcpy(path, DefaultSquirrelTicPath); break;
 #endif          
@@ -568,6 +580,20 @@ static void* getDemoCart(Console* console, ScriptLang script, s32* size)
         break;
 #endif /* defined(TIC_BUILD_WITH_WREN) */
 
+#if defined(TIC_BUILD_WITH_WASM)
+    case WasmScript:
+        {
+            static const u8 WasmDemoRom[] =
+            {
+                #include "../build/assets/wasmdemo.tic.dat"
+            };
+
+            demo = WasmDemoRom;
+            romSize = sizeof WasmDemoRom;
+        }
+        break;
+#endif /* defined(TIC_BUILD_WITH_WASM) */
+
 #if defined(TIC_BUILD_WITH_SQUIRREL)
     case SquirrelScript:
         {
@@ -633,6 +659,11 @@ static void onConsoleLoadDemoCommandConfirmed(Console* console, const char* para
 #if defined(TIC_BUILD_WITH_WREN)
     if(strcmp(param, DefaultWrenTicPath) == 0)
         data = getDemoCart(console, WrenScript, &size);
+#endif
+
+#if defined(TIC_BUILD_WITH_WASM)
+    if(strcmp(param, DefaultWasmTicPath) == 0)
+        data = getDemoCart(console, WasmScript, &size);
 #endif
 
 #if defined(TIC_BUILD_WITH_SQUIRREL)
@@ -736,6 +767,9 @@ static void onConsoleLoadCommandConfirmed(Console* console, const char* param)
 
             if(!fsExistsFile(console->fs, name))
                 name = getName(param, PROJECT_WREN_EXT);
+
+            if(!fsExistsFile(console->fs, name))
+                name = getName(param, PROJECT_WASM_EXT);
 
             if(!fsExistsFile(console->fs, name))
                 name = getName(param, PROJECT_FENNEL_EXT);
@@ -922,6 +956,14 @@ static void onConsoleNewCommandConfirmed(Console* console, const char* param)
             done = true;
         }
 #endif          
+
+#if defined(TIC_BUILD_WITH_WASM)
+        if(strcmp(param, "wasm") == 0)
+        {
+            loadDemo(console, WasmScript);
+            done = true;
+        }
+#endif
 
 #if defined(TIC_BUILD_WITH_SQUIRREL)
         if(strcmp(param, "squirrel") == 0)
@@ -1238,6 +1280,13 @@ static void onConsoleConfigCommand(Console* console, const char* param)
     else if(strcmp(param, "default wren") == 0)
     {
         onConsoleLoadDemoCommand(console, DefaultWrenTicPath);
+    }
+#endif
+
+#if defined(TIC_BUILD_WITH_WASM)
+    else if(strcmp(param, "default wren") == 0)
+    {
+        onConsoleLoadDemoCommand(console, DefaultWasmTicPath);
     }
 #endif
 
@@ -2795,6 +2844,8 @@ static void tick(Console* console)
             loadDemo(console, JavaScript);
 #elif defined(TIC_BUILD_WITH_WREN)
             loadDemo(console, WrenScript);
+#elif defined(TIC_BUILD_WITH_WASM)
+            loadDemo(console, WasmScript);
 #elif defined(TIC_BUILD_WITH_SQUIRREL)
             loadDemo(console, SquirrelScript);
 #endif          

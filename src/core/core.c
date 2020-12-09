@@ -342,6 +342,11 @@ const tic_script_config* tic_core_script_config(tic_mem* memory)
         return getWrenScriptConfig();
 #endif
 
+#if defined(TIC_BUILD_WITH_WASM)
+    if (compareMetatag(code, "script", "wasm", getWasmScriptConfig()->singleComment))
+        return getWasmScriptConfig();
+#endif
+
 #if defined(TIC_BUILD_WITH_SQUIRREL)
     if (compareMetatag(code, "script", "squirrel", getSquirrelScriptConfig()->singleComment))
         return getSquirrelScriptConfig();
@@ -353,6 +358,8 @@ const tic_script_config* tic_core_script_config(tic_mem* memory)
     return getJsScriptConfig();
 #elif defined(TIC_BUILD_WITH_WREN)
     return getWrenScriptConfig();
+#elif defined(TIC_BUILD_WITH_WASM)
+    return getWasmScriptConfig();
 #elif defined(TIC_BUILD_WITH_SQUIRREL)
     return getSquirrelScriptConfig();
 #endif
@@ -590,6 +597,10 @@ void tic_core_close(tic_mem* memory)
 
 #if defined(TIC_BUILD_WITH_WREN)
     getWrenScriptConfig()->close(memory);
+#endif
+
+#if defined(TIC_BUILD_WITH_WASM)
+    getWasmScriptConfig()->close(memory);
 #endif
 
     blip_delete(core->blip.left);

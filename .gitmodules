@@ -49,3 +49,9 @@
 [submodule "vendor/circle-stdlib"]
 	path = vendor/circle-stdlib
 	url = https://github.com/smuehlst/circle-stdlib.git
+[submodule "vendor/wasm3"]
+	path = vendor/wasm3
+	url = https://github.com/msx80/wasm3.git
+[submodule "vendor/wabt"]
+	path = vendor/wabt
+	url = https://github.com/msx80/wabt.git

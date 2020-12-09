@@ -27,6 +27,7 @@
 	!defined(TIC_BUILD_WITH_FENNEL) && 	\
 	!defined(TIC_BUILD_WITH_JS) && 		\
 	!defined(TIC_BUILD_WITH_WREN) &&	\
+	!defined(TIC_BUILD_WITH_WASM) &&	\
 	!defined(TIC_BUILD_WITH_SQUIRREL)
 
 #define TIC_BUILD_WITH_LUA 		1
@@ -35,6 +36,7 @@
 #define TIC_BUILD_WITH_JS 		1
 #define TIC_BUILD_WITH_WREN 	1
 #define TIC_BUILD_WITH_SQUIRREL 1
+#define TIC_BUILD_WITH_WASM 1
 
 #endif
 

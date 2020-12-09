@@ -2028,7 +2028,7 @@ static StartArgs parseArgs(s32 argc, const char **argv)
 
 Studio* studioInit(s32 argc, const char **argv, s32 samplerate, const char* folder, System* system)
 {
-    setbuf(stdout, NULL);
+    //setbuf(stdout, NULL);
 
     StartArgs args = parseArgs(argc, argv);
 
@@ -2114,6 +2114,7 @@ bool hasProjectExt(const char* name)
         || tic_tool_has_ext(name, PROJECT_MOON_EXT)
         || tic_tool_has_ext(name, PROJECT_JS_EXT)
         || tic_tool_has_ext(name, PROJECT_WREN_EXT)
+        || tic_tool_has_ext(name, PROJECT_WASM_EXT)
         || tic_tool_has_ext(name, PROJECT_SQUIRREL_EXT)
         || tic_tool_has_ext(name, PROJECT_FENNEL_EXT);
 }
